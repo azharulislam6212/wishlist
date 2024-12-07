@@ -1,0 +1,17 @@
+{% for product_handle in customer.wishlist or [] %}
+  {% assign product = all_products[product_handle] %}
+  {% if product %}
+    <div class="wishlist-grid" data-product-handle="{{ product.handle }}">
+      <a href="{{ product.url }}">
+        <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}">
+        <p>{{ product.title }}</p>
+        <p>{{ product.price | money }}</p>
+      </a>
+      <button class="wishlist-btn-js" data-product-handle="{{ product.handle }}" aria-label="Remove from Wishlist">
+        Remove
+      </button>
+    </div>
+  {% else %}
+    <p>No items in your wishlist yet.</p>
+  {% endif %}
+{% endfor %}
