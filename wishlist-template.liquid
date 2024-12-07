@@ -15,3 +15,36 @@
     <p>No items in your wishlist yet.</p>
   {% endif %}
 {% endfor %}
+
+
+<script>
+
+document.addEventListener('DOMContentLoaded', () => {
+  const wishlist = JSON.parse(localStorage.getItem('user_wishlist')) || [];
+  const wishlistContainer = document.querySelector('.wishlist_container');
+
+  if (wishlist.length === 0) {
+    wishlistContainer.innerHTML = '<p>Your wishlist is empty.</p>';
+  } else {
+    wishlist.forEach((handle) => {
+      fetch(`/products/${handle}.js`)
+        .then((response) => response.json())
+        .then((product) => {
+          const itemHtml = `
+            <div class="wishlist-item" data-product-handle="${product.handle}">
+              <a href="${product.url}">
+                <img src="${product.featured_image}" alt="${product.title}">
+                <p>${product.title}</p>
+                <p>${Shopify.formatMoney(product.price)}</p>
+              </a>
+              <button class="wishlist-btn-js" data-product-handle="${product.handle}">Remove</button>
+            </div>
+          `;
+          wishlistContainer.insertAdjacentHTML('beforeend', itemHtml);
+        });
+    });
+  }
+});
+
+
+</script>
